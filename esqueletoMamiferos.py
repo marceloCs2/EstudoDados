@@ -1,6 +1,6 @@
 import pandas as pd
 
-mamifero = pd.read_csv('mammal-neck-bones.csv')
+mamifero = pd.read_csv('csv/mammal-neck-bones.csv')
 print(mamifero.head())
 print('--------------------------------------------------------')
 print(mamifero.query('species == "giraffe"'))

@@ -1,5 +1,5 @@
 import pandas as pd
-df = pd.read_csv('adult-human-skeleton.csv')
+df = pd.read_csv('csv/adult-human-skeleton.csv')
 print(df.head())
 print('--------------------------------------------------------')
 print(df['region'].value_counts())

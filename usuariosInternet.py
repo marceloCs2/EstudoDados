@@ -1,0 +1,27 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+print('----Usuários de Internet ao decorrer dos anos----')
+internet = pd.read_csv('csv/world-internet-users.csv')
+print(internet.head())
+print('----Ano que ultrapassou 100 milhões de usuários----')
+excedem100M = internet.query('internet_users > 100000000')
+print(excedem100M.head(1))
+print('----População mundial ao decorrer dos anos----')
+populacao = pd.read_csv('csv/historical-world-population.csv')
+print(populacao.head())
+print('------------------------------------------------')
+df = internet.merge(populacao, on='year', how='left')
+df=df.dropna()
+print(df.head())
+print('----Percentual do mundo usando internet----')
+df['percent'] = df.eval('internet_users / population * 100')
+df['percent'] = df['percent'].round(2)
+print(df.head())
+
+print('----mais da metade do mundo está conectado----')
+plt.plot(df['year'], df['percent'])
+plt.axhline(50, color='red', linestyle='--')
+plt.xlabel('Ano')
+plt.ylabel('Percentual de Usuários de Internet')
+plt.show()
