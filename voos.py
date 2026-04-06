@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+voos = pd.read_csv('csv/flights.csv')
+print('----------------------Voos--------------------')
+print(voos.head())
+departures = voos[['scheduled', 'actual']]
+print(departures.head())
+departures.info()
+print('---------------------convertendo str em datetime--------------------')
+departures['scheduled'] = pd.to_datetime(departures['scheduled'])
+departures['actual'] = pd.to_datetime(departures['actual'])
+print(departures.head())
+print(departures.info())
+print('---------------------calculando o atraso--------------------')
+departures['delay']= departures.eval('actual - scheduled')
+print(departures.head())
+departures['atrasado'] = departures['delay'].dt.total_seconds() > 900
+print(departures.head())
+print('---------------------dias da semana-------------------')
+departures['dia'] = departures['actual'].dt.strftime('%a')
+print(departures.head())
+print('---------------------porcentagem de atrasos por dia da semana-------------------')
+contagem_em_atrasos = departures.groupby('dia')['atrasado'].mean()
+porcentagem_em_atrasos = contagem_em_atrasos * 100
+print(porcentagem_em_atrasos)
+print('---------------------ordenar dias da semana-------------------')
+dias_ordenados = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+porcentagem_em_atrasos = porcentagem_em_atrasos.reindex(dias_ordenados)
+print(porcentagem_em_atrasos)
+print('---------------------plotar o gráfico-------------------')
+plt.bar(porcentagem_em_atrasos.index, porcentagem_em_atrasos.values)
+plt.xlabel('Dia da Semana')
+plt.ylabel('Porcentagem de Atrasos')
+plt.title('Porcentagem de Atrasos por Dia da Semana')
+plt.show()
